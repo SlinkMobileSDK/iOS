@@ -1,0 +1,78 @@
+<html>
+<head>
+<title>SeciossAuth OAuth 2.0</title>
+<script type="text/javascript" src="./jquery.js"></script>
+<script type="text/javascript" src="./jsrsasign.js"></script>
+<script type="text/javascript" src="./seciossauth.js"></script>
+<script type="text/javascript">
+
+var finish        = sessionStorage.getItem('SECIOSS_OAUTH2_FINISH');
+var authorize     = sessionStorage.getItem('SECIOSS_OAUTH2_AUTHORIZE');
+var token         = sessionStorage.getItem('SECIOSS_OAUTH2_TOKEN');
+var resource      = sessionStorage.getItem('SECIOSS_OAUTH2_RESOURCE');
+var client_id     = sessionStorage.getItem('SECIOSS_OAUTH2_CLIENT_ID');
+var client_secret = sessionStorage.getItem('SECIOSS_OAUTH2_CLIENT_SECRET');
+var redirect_uri  = sessionStorage.getItem('SECIOSS_OAUTH2_REDIRECT_URI');
+var scope         = sessionStorage.getItem('SECIOSS_OAUTH2_SCOPE');
+var response_type = sessionStorage.getItem('SECIOSS_OAUTH2_RESPONSE_TYPE');
+
+var _state        = sessionStorage.getItem('_state');
+var _nonce        = sessionStorage.getItem('_nonce');
+var _point        = sessionStorage.getItem('_point');
+var _limit        = sessionStorage.getItem('_limit');
+var _retry        = 0;
+var _orign        = 'oauth2';
+var _beans        = {};
+
+var token_type    = localStorage.getItem('SECIOSS_OAUTH2_TOKEN_TYPE');
+var access_token  = localStorage.getItem('SECIOSS_OAUTH2_ACCESS_TOKEN');
+var refresh_token = localStorage.getItem('SECIOSS_OAUTH2_REFRESH_TOKEN');
+
+if (!_limit) {
+    _limit = 10;
+}
+
+if (!_point) {
+    if (token_type && access_token) {
+        _point = 'resource';
+    }
+    else if (refresh_token) {
+        _point = 'token';
+    }
+    else {
+        _point = 'init';
+    }
+}
+
+if (!authorize) {
+    doFinish('no_authorize');
+}
+if (!client_id) {
+    doFinish('no_client_id');
+}
+if (!client_secret) {
+    doFinish('no_client_secret');
+}
+if (!redirect_uri) {
+    doFinish('no_redirect_uri');
+}
+if (!response_type) {
+    doFinish('no_response_type');
+}
+
+_state = _state ? _state : randString(16);
+_nonce = _nonce ? _nonce : randString(16);
+sessionStorage.setItem('_state', _state);
+sessionStorage.setItem('_nonce', _nonce);
+
+$('document').ready(function() {
+    init();
+    //$('#resultdiv').html(_point);
+});
+
+</script>
+</head>
+<body>
+<div id="resultdiv">Loading...</div>
+</body>
+</html>
